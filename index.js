@@ -27,7 +27,35 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         await client.connect();
-        console.log('Database connected successfully');
+
+        //set database and database collection
+        const database = client.db("holidayPlanner");
+        const packageCollection = database.collection("packages");
+        const orderCollection = database.collection("orders");
+
+
+
+        //GET API-popular packages
+        app.get('/packages', async (req, res) => {
+            const packages = await packageCollection.find({}).toArray();
+            res.send(packages);
+        })
+
+
+        //POST API -booking orders
+        app.post('/orders', async (req, res) => {
+            const orders = await orderCollection.insertOne(req.body);
+            res.json(orders);
+        });
+
+
+        //GET API-booking orders
+        app.get('/orders', async (req, res) => {
+            const orders = await orderCollection.find({}).toArray();
+            res.send(orders);
+        })
+
+
 
     } finally {
         //await client.close();
