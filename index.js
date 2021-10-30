@@ -39,7 +39,23 @@ async function run() {
         app.get('/packages', async (req, res) => {
             const packages = await packageCollection.find({}).toArray();
             res.send(packages);
-        })
+        });
+
+
+        //POST API- New package
+        app.post('/packages', async (req, res) => {
+            const packages = await packageCollection.insertOne(req.body);
+            res.json(packages);
+        });
+
+
+        //GET API - package details
+        app.get('/packages/:id', async (req, res) => {
+            const packageDetails = await packageCollection.findOne({ _id: ObjectId(req.params.id) });
+            res.send(packageDetails);
+            console.log(packageDetails);
+        });
+
 
 
         //POST API -booking orders
@@ -53,7 +69,14 @@ async function run() {
         app.get('/orders', async (req, res) => {
             const orders = await orderCollection.find({}).toArray();
             res.send(orders);
-        })
+        });
+
+
+        //Delete API- delete order
+        app.delete('/orders/:id', async (req, res) => {
+            const deletedOrder = await orderCollection.deleteOne({ _id: ObjectId(req.params.id) });
+            res.json(deletedOrder)
+        });
 
 
 
