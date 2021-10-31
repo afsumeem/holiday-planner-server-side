@@ -57,7 +57,6 @@ async function run() {
         });
 
 
-
         //POST API -booking orders
         app.post('/orders', async (req, res) => {
             const orders = await orderCollection.insertOne(req.body);
@@ -69,6 +68,20 @@ async function run() {
         app.get('/orders', async (req, res) => {
             const orders = await orderCollection.find({}).toArray();
             res.send(orders);
+        });
+
+
+        //UPDATE API - booking orders status property
+        app.put('/orders/:id', async (req, res) => {
+            const order = req.body;
+            const options = { upsert: true };
+            const updatedOrder = {
+                $set: { status: order.status }
+            };
+
+            const updateStatus = await orderCollection.updateOne({ _id: ObjectId(req.params.id) }, updatedOrder, options)
+
+            res.json(updateStatus);
         });
 
 
