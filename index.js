@@ -78,8 +78,7 @@ async function run() {
             const updatedOrder = {
                 $set: { status: order.status }
             };
-
-            const updateStatus = await orderCollection.updateOne({ _id: ObjectId(req.params.id) }, updatedOrder, options)
+            const updateStatus = await orderCollection.updateOne({ _id: ObjectId(req.params.id) }, updatedOrder, options);
 
             res.json(updateStatus);
         });
